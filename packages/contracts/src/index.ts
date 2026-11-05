@@ -516,6 +516,9 @@ export interface YamiBridge {
     detectClis(): Promise<
       Array<{ name: string; command: string; preset?: string; installed: boolean; path: string | null }>
     >;
+    detectEnv(): Promise<
+      Array<{ env: string; provider: string; protocol: "openai" | "anthropic"; present: boolean; value: string | null }>
+    >;
   };
   threads: {
     list(agentId?: string): Promise<Thread[]>;

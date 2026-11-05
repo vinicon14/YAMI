@@ -1361,3 +1361,120 @@ textarea::placeholder {
     transform: translateY(6px);
   }
 }
+
+/* ---------- polimento visual ---------- */
+
+.card {
+  transition: border-color 160ms ease, transform 160ms ease, box-shadow 160ms ease;
+  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.02) inset, 0 8px 24px rgba(0, 0, 0, 0.18);
+}
+
+.card:hover {
+  border-color: #2c3344;
+}
+
+.btn {
+  transition: background 140ms ease, border-color 140ms ease, transform 140ms ease, box-shadow 140ms ease;
+}
+
+.btn:hover:not(:disabled) {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.25);
+}
+
+.btn:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+.badge {
+  transition: background 140ms ease, border-color 140ms ease;
+}
+
+.list-row {
+  transition: border-color 140ms ease, background 140ms ease, transform 140ms ease;
+}
+
+.list-row:hover {
+  border-color: #2c3344;
+  background: #1a1f2b;
+}
+
+input,
+select,
+textarea {
+  transition: border-color 140ms ease, box-shadow 140ms ease;
+}
+
+.topbar h1 {
+  background: linear-gradient(120deg, var(--text) 0%, #c9d3e6 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.brand-mark {
+  box-shadow: 0 6px 16px rgba(240, 180, 41, 0.35);
+  transition: transform 200ms ease;
+}
+
+.brand-mark:hover {
+  transform: rotate(-6deg) scale(1.05);
+}
+
+.nav-item {
+  transition: background 140ms ease, color 140ms ease, transform 140ms ease;
+}
+
+.nav-item:hover {
+  transform: translateX(2px);
+}
+
+.nav-item.is-active {
+  box-shadow: inset 0 0 0 1px rgba(240, 180, 41, 0.2);
+}
+
+.dot-on {
+  animation: pulse-dot 2.4s ease-in-out infinite;
+}
+
+@keyframes pulse-dot {
+  0%, 100% { box-shadow: 0 0 0 3px rgba(61, 220, 151, 0.16); }
+  50% { box-shadow: 0 0 0 6px rgba(61, 220, 151, 0.08); }
+}
+
+.empty {
+  transition: border-color 160ms ease;
+}
+
+.empty:hover {
+  border-color: var(--accent);
+}
+
+.kpi {
+  transition: transform 160ms ease, border-color 160ms ease;
+}
+
+.kpi:hover {
+  transform: translateY(-2px);
+  border-color: #2c3344;
+}
+
+.preset {
+  transition: border-color 140ms ease, transform 140ms ease, background 140ms ease;
+}
+
+.preset:hover {
+  transform: translateY(-2px);
+}
+
+.switch-track {
+  transition: background 160ms ease, border-color 160ms ease;
+}
+
+.switch input:checked + .switch-track .switch-thumb {
+  box-shadow: 0 0 8px rgba(240, 180, 41, 0.5);
+}
+
+.toast {
+  backdrop-filter: blur(6px);
+}

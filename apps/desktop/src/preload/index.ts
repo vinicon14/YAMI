@@ -64,6 +64,9 @@ const bridge: YamiBridge = {
       ipcRenderer.invoke("yami:providers:detect-clis") as Promise<
         Array<{ name: string; command: string; preset?: string; installed: boolean; path: string | null }>
       >,
+    detectEnv: () => ipcRenderer.invoke("yami:providers:detect-env") as Promise<
+      Array<{ env: string; provider: string; protocol: "openai" | "anthropic"; present: boolean; value: string | null }>
+    >,
   },
   threads: {
     list: (agentId) => ipcRenderer.invoke("yami:threads:list", agentId) as Promise<Thread[]>,

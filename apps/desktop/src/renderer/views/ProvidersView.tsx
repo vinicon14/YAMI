@@ -107,6 +107,9 @@ export function ProvidersView(): React.JSX.Element {
   const [detected, setDetected] = useState<
     Array<{ name: string; command: string; preset?: string; installed: boolean; path: string | null }>
   >([]);
+  const [detectedEnv, setDetectedEnv] = useState<
+    Array<{ env: string; provider: string; protocol: "openai" | "anthropic"; present: boolean; value: string | null }>
+  >([]);
 
   const load = useCallback(async (): Promise<void> => {
     if (!bridge) return;
@@ -122,7 +125,12 @@ export function ProvidersView(): React.JSX.Element {
   const detect = useCallback(async (): Promise<void> => {
     if (!bridge) return;
     try {
-      setDetected(await bridge.providers.detectClis());
+      const [clis, envs] = await Promise.all([
+        bridge.providers.detectClis(),
+        bridge.providers.detectEnv(),
+      ]);
+      setDetected(clis);
+      setDetectedEnv(envs);
     } catch (cause) {
       notify(errorText(cause), "error");
     }
@@ -375,6 +383,61 @@ export function ProvidersView(): React.JSX.Element {
             O provedor local é gerenciado pela aba <strong>IA local</strong>. Ele nunca recebe
             ferramentas: apenas responde em texto.
           </p>
+        )}
+      </Card>
+
+      <Card title="Conexão fácil (variáveis de ambiente)" wide>
+        <p className="muted">
+          Se você já exportou uma chave de API no sistema (<code>OPENAI_API_KEY</code>,{" "}
+          <code>ANTHROPIC_API_KEY</code>, <code>GEMINI_API_KEY</code>), conecte com um clique.
+        </p>
+        {detectedEnv.length === 0 ? (
+          <Empty>Nenhuma variável detectada.</Empty>
+        ) : (
+          <ul className="list">
+            {detectedEnv.map((item) => (
+              <li key={item.env} className="list-row">
+                <div className="list-body">
+                  <strong>
+                    {item.provider} <Badge tone={item.present ? "ok" : "neutral"}>{item.present ? "encontrada" : "ausente"}</Badge>
+                  </strong>
+                  <small>
+                    {item.env} · {item.present ? item.value : "não definida"}
+                  </small>
+                </div>
+                <div className="list-actions">
+                  {item.present && (
+                    <button
+                      type="button"
+                      className="btn btn-small btn-accent"
+                      onClick={() => {
+                        setForm({
+                          ...EMPTY,
+                          name: item.provider,
+                          kind: "http",
+                          auth: "api-key",
+                          protocol: item.protocol,
+                          baseUrl:
+                            item.provider === "OpenAI"
+                              ? "https://api.openai.com/v1"
+                              : item.provider === "Anthropic"
+                                ? "https://api.anthropic.com/v1"
+                                : "https://generativelanguage.googleapis.com/v1beta/openai",
+                          apiKey: "",
+                        });
+                        notify(
+                          `Preenchido para ${item.provider}. Salve para usar a chave do ambiente (ela não será copiada).`,
+                          "info",
+                        );
+                      }}
+                    >
+                      Conectar
+                    </button>
+                  )}
+                </div>
+              </li>
+            ))}
+          </ul>
         )}
       </Card>
 

@@ -237,6 +237,19 @@ function registerIpc(): void {
     return boot().providers.models(id);
   });
 
+  ipcMain.handle("yami:providers:detect-env", () => {
+    const names = [
+      { env: "OPENAI_API_KEY", provider: "OpenAI", protocol: "openai" as const },
+      { env: "ANTHROPIC_API_KEY", provider: "Anthropic", protocol: "anthropic" as const },
+      { env: "GEMINI_API_KEY", provider: "Gemini", protocol: "openai" as const },
+    ];
+    return names.map((item) => ({
+      ...item,
+      present: Boolean(process.env[item.env]),
+      value: process.env[item.env] ? `${process.env[item.env]!.slice(0, 6)}…` : null,
+    }));
+  });
+
   ipcMain.handle("yami:providers:detect-clis", () => {
     const known: Array<{ name: string; command: string; preset?: string }> = [
       { name: "Codex (OpenAI)", command: "codex", preset: "Codex (OpenAI)" },
