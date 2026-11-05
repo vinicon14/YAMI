@@ -145,6 +145,39 @@ export function VoiceView(): React.JSX.Element {
 
   return (
     <div className="stack">
+      <Card title="Configurador rápido de voz" wide>
+        <p className="muted">
+          Detecta o VoiceStudio em <code>127.0.0.1:3900</code> e configura tudo com um clique. Se não
+          estiver disponível, o YAMI usa a voz offline do sistema.
+        </p>
+        <div className="button-row">
+          <button
+            type="button"
+            className="btn btn-accent"
+            onClick={async () => {
+              if (!bridge) return;
+              try {
+                const current = await bridge.voice.status();
+                setStatus(current);
+                if (current.available) {
+                  await updateSettings({ voiceUrl: current.url, autoSpeak: true });
+                  notify("VoiceStudio conectado e leitura automática ativada.", "ok");
+                } else {
+                  notify("VoiceStudio offline. Usando voz do sistema.", "info");
+                }
+              } catch (cause) {
+                notify(errorText(cause), "error");
+              }
+            }}
+          >
+            Configurar automaticamente
+          </button>
+          <button type="button" className="btn" onClick={() => void check()}>
+            Verificar conexão
+          </button>
+        </div>
+      </Card>
+
       <Card
         title="VoiceStudio"
         actions={
