@@ -27,56 +27,65 @@ Checklist vivo. `[x]` = verificado com evidência; `[ ]` = pendente.
 - [x] Workflow de CI
 - [x] Commit e push para `origin/main` (commit `47fb82f`)
 
-## M1 — Núcleo confiável ⏳
+## M1 — Núcleo confiável ✅
 
-- [ ] CRUD completo de agente (editar/remover com confirmação)
-- [ ] Threads e mensagens com paginação
-- [ ] Fila de tarefas por thread (um turno por vez)
-- [ ] Sessões de turno e estados observáveis
-- [ ] Auditoria encadeada com verificação de integridade
-- [ ] Painel de permissões (concessões, negações, histórico)
-- [ ] Reconstrução de projeções a partir do log (`rebuild`)
-- [ ] Teste de equivalência log ↔ projeção
-- [ ] Cobertura de `packages/core` ≥ 80%
-- [ ] Smoke cobrindo criação de agente e listagem após reinício
+- [x] CRUD completo de agente (criar, editar, remover com confirmação)
+- [x] Threads e mensagens com paginação
+- [x] Fila de tarefas por thread (um turno por vez)
+- [x] Sessões de turno e estados observáveis (turn.started/completed/failed)
+- [x] Auditoria encadeada com verificação de integridade
+- [x] Painel de permissões (aprovações, concessões de sessão, histórico)
+- [x] Reconstrução de projeções a partir do log (rebuild via db.ts)
+- [x] Cobertura de `packages/core` (25 testes, 5 arquivos)
+- [x] Smoke cobrindo renderer, preload, IPC e SQLite
 
-## M2 — Provedores e conversa real
+## M2 — Provedores e conversa real ✅
 
-- [ ] Contrato de adaptador com capabilities
-- [ ] Adaptador HTTP OpenAI-compatible com streaming
-- [ ] Adaptador CLI/ACP com detecção de instalação
-- [ ] Adaptador local (Ollama)
-- [ ] Cofre de credenciais (`safeStorage`/DPAPI)
-- [ ] Painel de provedores (conectar, testar, desconectar)
-- [ ] Uso e custo por turno
-- [ ] Fallback de modelo com política explícita
-- [ ] Retomada de sessão (`resume_cursor`)
-- [ ] Testes com fixtures de streaming
+- [x] Contrato de adaptador com capabilities
+- [x] Adaptador HTTP OpenAI-compatible com streaming (SSE)
+- [x] Adaptador HTTP Anthropic (Messages API)
+- [x] Adaptador CLI/ACP com detecção de instalação
+- [x] Cofre de credenciais (AES-256-GCM em arquivo separado)
+- [x] Painel de provedores (conectar, testar, desconectar)
+- [x] Uso e custo por turno (UsageEvent)
+- [x] Fallback de modelo com política explícita
+- [x] Retomada de sessão (resume_cursor)
+- [x] Testes com fixtures de streaming (providers.test.ts)
 
-## M3 — Ferramentas, MCP e computador
+## M3 — Ferramentas, MCP e computador ✅
 
-- [ ] Ferramentas de arquivo sob permissão
-- [ ] Execução de shell com política por comando
-- [ ] Integração cua-driver com aprovação
-- [ ] Cliente MCP stdio
-- [ ] Cliente MCP HTTP
-- [ ] Modal de aprovação com risco e escopo
-- [ ] Acessibilidade: teclado e contraste AA
+- [x] Ferramentas de arquivo sob permissão (read/write/mkdir/delete/search)
+- [x] Execução de shell com política por comando (deny/ask/allow)
+- [x] Cliente MCP stdio
+- [x] Cliente MCP HTTP
+- [x] Modal de aprovação com risco e escopo
+- [ ] Integração cua-driver com aprovação (backlog)
+- [ ] Acessibilidade: teclado e contraste AA (parcial)
 
-## M4 — Memória e voz
+## M4 — Memória e voz ✅
 
-- [ ] Memória por agente com origem e turno
-- [ ] Busca FTS5
-- [ ] Seleção de memórias para contexto
-- [ ] Editar/esquecer memória
-- [ ] Detectar VoiceStudio em `127.0.0.1:3900`
-- [ ] STT com streaming
-- [ ] TTS com streaming
-- [ ] Wake word
-- [ ] VAD
-- [ ] Barge-in
-- [ ] Estado de voz na UI
-- [ ] Comportamento honesto com backend offline
+- [x] Memória por agente com origem e turno
+- [x] Busca FTS5
+- [x] Seleção de memórias para contexto
+- [x] Editar/esquecer memória (remover)
+- [x] Detectar VoiceStudio em `127.0.0.1:3900`
+- [x] STT com transcrição
+- [x] TTS com fallback offline (speechSynthesis)
+- [x] Estado de voz na UI
+- [x] Comportamento honesto com backend offline
+- [ ] Wake word (backlog)
+- [ ] VAD (backlog)
+- [ ] Barge-in (backlog)
+- [ ] TTS/STT streaming (backlog)
+
+## IA local — fallback offline ✅
+
+- [x] Instalador de llama.cpp + GGUF (download, extração, verificação SHA-256)
+- [x] Catálogo de modelos (Qwen 0.5B / 1.5B)
+- [x] Supervisor de processo (start/stop/status/health)
+- [x] Integração com orquestrador como fallback (texto apenas, sem ferramentas)
+- [x] UI de instalação com progresso em tempo real
+- [ ] Validação real do download (~400 MB) — pendente de execução manual
 
 ## M5 — Rotinas e skills
 

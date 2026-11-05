@@ -44,10 +44,12 @@ export class PermissionEngine {
   }
 
   private isInsideAllowedRoot(scope: PermissionScope, target: string): boolean {
-    if (!isAbsolute(target)) return false;
+    const resolvedTarget = isAbsolute(target)
+      ? resolve(target)
+      : resolve(scope.workspaceRoot, target);
     const roots = [scope.workspaceRoot, ...(scope.extraRoots ?? [])];
     return roots.some((root) => {
-      const rel = relative(resolve(root), resolve(target));
+      const rel = relative(resolve(root), resolvedTarget);
       return rel === "" || (!rel.startsWith("..") && !isAbsolute(rel));
     });
   }

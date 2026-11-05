@@ -23,6 +23,14 @@ export interface CreateAgentInput {
   modelId?: string | null;
 }
 
+export interface UpdateAgentInput {
+  name?: string;
+  instructions?: string;
+  providerId?: string | null;
+  modelId?: string | null;
+  access?: AccessLevel;
+}
+
 function toAgent(row: AgentRow): Agent {
   return {
     id: row.id,
@@ -90,6 +98,39 @@ export class AgentService {
       | AgentRow
       | undefined;
     return row ? toAgent(row) : null;
+  }
+
+  update(id: string, input: UpdateAgentInput): Agent {
+    const current = this.get(id);
+    if (!current) throw new Error("Agente não encontrado.");
+
+    const next: Agent = {
+      ...current,
+      name: input.name?.trim() || current.name,
+      instructions: input.instructions ?? current.instructions,
+      providerId: input.providerId === undefined ? current.providerId : input.providerId,
+      modelId: input.modelId === undefined ? current.modelId : input.modelId,
+      access: input.access ?? current.access,
+      updatedAt: new Date().toISOString(),
+    };
+
+    this.db
+      .prepare(
+        `UPDATE agents
+         SET name = ?, instructions = ?, provider_id = ?, model_id = ?, access = ?, updated_at = ?
+         WHERE id = ?`,
+      )
+      .run(
+        next.name,
+        next.instructions,
+        next.providerId,
+        next.modelId,
+        next.access,
+        next.updatedAt,
+        id,
+      );
+
+    return next;
   }
 
   remove(id: string): boolean {
