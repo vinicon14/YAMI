@@ -60,6 +60,10 @@ const bridge: YamiBridge = {
     remove: (id) => ipcRenderer.invoke("yami:providers:remove", id) as Promise<boolean>,
     test: (id) => ipcRenderer.invoke("yami:providers:test", id) as Promise<ProviderTestResult>,
     models: (id) => ipcRenderer.invoke("yami:providers:models", id) as Promise<string[]>,
+    detectClis: () =>
+      ipcRenderer.invoke("yami:providers:detect-clis") as Promise<
+        Array<{ name: string; command: string; preset?: string; installed: boolean; path: string | null }>
+      >,
   },
   threads: {
     list: (agentId) => ipcRenderer.invoke("yami:threads:list", agentId) as Promise<Thread[]>,

@@ -237,6 +237,25 @@ function registerIpc(): void {
     return boot().providers.models(id);
   });
 
+  ipcMain.handle("yami:providers:detect-clis", () => {
+    const known: Array<{ name: string; command: string; preset?: string }> = [
+      { name: "Codex (OpenAI)", command: "codex", preset: "Codex (OpenAI)" },
+      { name: "Claude Code", command: "claude", preset: "Claude Code" },
+      { name: "Gemini CLI", command: "gemini", preset: "Gemini CLI" },
+      { name: "Cursor", command: "cursor", preset: "Cursor" },
+    ];
+    const { execSync } = require("node:child_process") as typeof import("node:child_process");
+    return known.map((item) => {
+      try {
+        const out = execSync(`where ${item.command}`, { encoding: "utf8", stdio: ["ignore", "pipe", "ignore"] });
+        const path = out.split(/\r?\n/).map((line) => line.trim()).find(Boolean) ?? null;
+        return { ...item, installed: Boolean(path), path };
+      } catch {
+        return { ...item, installed: false, path: null };
+      }
+    });
+  });
+
   /* Conversas -------------------------------------------------------- */
 
   ipcMain.handle("yami:threads:list", (_event, agentId?: unknown) =>

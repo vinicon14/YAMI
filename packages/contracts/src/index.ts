@@ -513,6 +513,9 @@ export interface YamiBridge {
     remove(id: string): Promise<boolean>;
     test(id: string): Promise<ProviderTestResult>;
     models(id: string): Promise<string[]>;
+    detectClis(): Promise<
+      Array<{ name: string; command: string; preset?: string; installed: boolean; path: string | null }>
+    >;
   };
   threads: {
     list(agentId?: string): Promise<Thread[]>;

@@ -104,6 +104,9 @@ export function ProvidersView(): React.JSX.Element {
   const [testing, setTesting] = useState<string | null>(null);
   const [result, setResult] = useState<{ id: string; value: ProviderTestResult } | null>(null);
   const [saving, setSaving] = useState(false);
+  const [detected, setDetected] = useState<
+    Array<{ name: string; command: string; preset?: string; installed: boolean; path: string | null }>
+  >([]);
 
   const load = useCallback(async (): Promise<void> => {
     if (!bridge) return;
@@ -116,9 +119,19 @@ export function ProvidersView(): React.JSX.Element {
     }
   }, [bridge, notify]);
 
+  const detect = useCallback(async (): Promise<void> => {
+    if (!bridge) return;
+    try {
+      setDetected(await bridge.providers.detectClis());
+    } catch (cause) {
+      notify(errorText(cause), "error");
+    }
+  }, [bridge, notify]);
+
   useEffect(() => {
     void load();
-  }, [load]);
+    void detect();
+  }, [load, detect]);
 
   const update = <K extends keyof FormState>(key: K, value: FormState[K]): void => {
     setForm((current) => ({ ...current, [key]: value }));
@@ -362,6 +375,60 @@ export function ProvidersView(): React.JSX.Element {
             O provedor local é gerenciado pela aba <strong>IA local</strong>. Ele nunca recebe
             ferramentas: apenas responde em texto.
           </p>
+        )}
+      </Card>
+
+      <Card title="Conexão fácil (CLIs detectadas)" wide>
+        <p className="muted">
+          Detecta CLIs de provedores instaladas no sistema e conecta com um clique. A autenticação
+          continua sendo feita pela própria CLI (ex.: <code>codex login</code>).
+        </p>
+        <div className="button-row" style={{ marginBottom: 10 }}>
+          <button type="button" className="btn" onClick={() => void detect()}>
+            Re-detectar
+          </button>
+        </div>
+        {detected.length === 0 ? (
+          <Empty>Nenhuma CLI conhecida detectada.</Empty>
+        ) : (
+          <ul className="list">
+            {detected.map((item) => (
+              <li key={item.command} className="list-row">
+                <div className="list-body">
+                  <strong>
+                    {item.name}{" "}
+                    <Badge tone={item.installed ? "ok" : "neutral"}>
+                      {item.installed ? "instalada" : "ausente"}
+                    </Badge>
+                  </strong>
+                  <small>{item.path ?? "não encontrada no PATH"}</small>
+                </div>
+                <div className="list-actions">
+                  {item.installed && item.preset && (
+                    <button
+                      type="button"
+                      className="btn btn-small btn-accent"
+                      onClick={() => {
+                        const preset = presets.find((p) => p.name === item.preset);
+                        if (preset) setForm(fromPreset(preset));
+                        else
+                          setForm({
+                            ...EMPTY,
+                            name: item.name,
+                            kind: "cli",
+                            auth: "cli-login",
+                            command: item.command,
+                            args: "",
+                          });
+                      }}
+                    >
+                      Conectar
+                    </button>
+                  )}
+                </div>
+              </li>
+            ))}
+          </ul>
         )}
       </Card>
 
