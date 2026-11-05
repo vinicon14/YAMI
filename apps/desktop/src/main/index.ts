@@ -471,7 +471,73 @@ function createWindow(): void {
     if (isSmokeRun()) void runSmoke(window);
   });
 
+  // Tamagotchi: janela pequena, flutuante, sempre no topo, com mascote animado.
+  if (!isSmokeRun()) createPetWindow();
+
   void window.loadFile(join(__dirname, "../../dist/renderer/index.html"));
+}
+
+let petWindow: BrowserWindow | null = null;
+
+function createPetWindow(): void {
+  const { screen } = require("electron") as typeof import("electron");
+  const display = screen.getPrimaryDisplay();
+  const { width, height } = display.workAreaSize;
+
+  const window = new BrowserWindow({
+    width: 120,
+    height: 120,
+    x: width - 140,
+    y: height - 140,
+    frame: false,
+    transparent: true,
+    resizable: false,
+    alwaysOnTop: true,
+    skipTaskbar: true,
+    focusable: false,
+    show: false,
+    webPreferences: {
+      contextIsolation: true,
+      nodeIntegration: false,
+      sandbox: true,
+    },
+  });
+
+  petWindow = window;
+
+  const html = `<!doctype html>
+<html><head><meta charset="UTF-8"><style>
+  html,body{margin:0;height:100%;background:transparent;overflow:hidden;font-family:sans-serif;}
+  .pet{position:absolute;bottom:8px;right:8px;width:96px;height:96px;display:grid;place-items:center;
+    filter:drop-shadow(0 6px 10px rgba(0,0,0,.45));cursor:pointer;user-select:none;}
+  .body{width:78px;height:62px;background:radial-gradient(circle at 30% 30%,#ffe08a,#f0b429);
+    border-radius:46% 54% 50% 50%;position:relative;animation:bob 2.4s ease-in-out infinite;}
+  .eye{position:absolute;top:22px;width:9px;height:12px;background:#1a1305;border-radius:50%;
+    animation:blink 3.6s infinite;}
+  .eye.l{left:20px;} .eye.r{right:20px;}
+  .mouth{position:absolute;bottom:16px;left:50%;transform:translateX(-50%);width:16px;height:8px;
+    border-bottom:2px solid #1a1305;border-radius:0 0 12px 12px;}
+  .spark{position:absolute;top:4px;right:6px;font-size:14px;animation:spark 2s infinite;}
+  @keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
+  @keyframes blink{0%,92%,100%{transform:scaleY(1)}94%,98%{transform:scaleY(.15)}}
+  @keyframes spark{0%,100%{opacity:.2;transform:scale(.8)}50%{opacity:1;transform:scale(1.2)}}
+</style></head><body>
+  <div class="pet" title="YAMI">
+    <div class="body">
+      <div class="eye l"></div>
+      <div class="eye r"></div>
+      <div class="mouth"></div>
+    </div>
+    <div class="spark">✦</div>
+  </div>
+</body></html>`;
+
+  window.loadURL(`data:text/html;charset=utf-8,${encodeURIComponent(html)}`);
+  window.once("ready-to-show", () => window.show());
+
+  window.on("closed", () => {
+    petWindow = null;
+  });
 }
 
 function isSmokeRun(): boolean {
