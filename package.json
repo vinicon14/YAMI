@@ -14,13 +14,16 @@
     "test": "pnpm -r test",
     "smoke": "pnpm --filter @yami/desktop smoke",
     "dev": "pnpm --filter @yami/desktop dev",
-    "start": "pnpm --filter @yami/desktop start"
+    "start": "pnpm --filter @yami/desktop start",
+    "package": "pnpm --filter @yami/desktop package"
   },
   "devDependencies": {
     "typescript": "5.9.3",
     "vitest": "5.1.0"
   },
   "pnpm": {
-    "onlyBuiltDependencies": ["electron"]
+    "onlyBuiltDependencies": [
+      "electron"
+    ]
   }
 }

@@ -1,6 +1,8 @@
 {
   "name": "@yami/desktop",
   "version": "0.1.0",
+  "description": "YAMI - assistente pessoal de IA",
+  "author": "vinicon14",
   "private": true,
   "main": "dist-electron/main/index.js",
   "scripts": {
@@ -11,7 +13,28 @@
     "test": "vitest run --passWithNoTests",
     "start": "electron .",
     "smoke": "pnpm run build && electron . --yami-smoke",
-    "dev": "pnpm run build && electron ."
+    "dev": "pnpm run build && electron .",
+    "package": "pnpm run build && electron-builder --win --x64"
+  },
+  "build": {
+    "appId": "com.yami.desktop",
+    "productName": "YAMI",
+    "directories": { "output": "dist-installer" },
+    "files": [
+      "dist-electron/**/*",
+      "dist/renderer/**/*",
+      "package.json"
+    ],
+    "win": {
+      "target": [{ "target": "nsis", "arch": ["x64"] }]
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "shortcutName": "YAMI"
+    }
   },
   "dependencies": {
     "@yami/contracts": "workspace:*",
@@ -25,6 +48,7 @@
     "@types/react-dom": "19.3.0",
     "@vitejs/plugin-react": "6.2.1",
     "electron": "42.11.18",
+    "electron-builder": "^26.18.0",
     "typescript": "5.9.3",
     "vite": "8.3.6"
   }

@@ -9,3 +9,4 @@ dist-electron/
 coverage/
 .vite/
 *.tsbuildinfo
+apps/desktop/dist-installer/
