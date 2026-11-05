@@ -33,6 +33,5 @@ Formato baseado em [Keep a Changelog](https://keepachangelog.com/pt-BR/1.1.0/). 
 
 ### Conhecido
 
-- Push para o GitHub pendente de autenticação.
 - Voz ainda não integrada (marco M4).
 - Provedores ainda não implementados (marco M2).

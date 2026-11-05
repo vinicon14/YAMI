@@ -25,7 +25,7 @@ Checklist vivo. `[x]` = verificado com evidência; `[ ]` = pendente.
 - [x] Documentação da Fase 1 (8 docs)
 - [x] README, ROADMAP, TASKS, PROGRESS, DECISIONS, CHANGELOG
 - [x] Workflow de CI
-- [ ] Commit e push para `origin/main` (bloqueado por autenticação do GitHub)
+- [x] Commit e push para `origin/main` (commit `47fb82f`)
 
 ## M1 — Núcleo confiável ⏳
 

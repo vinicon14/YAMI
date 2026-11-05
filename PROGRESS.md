@@ -55,7 +55,12 @@ O smoke abre o Electron real, carrega o renderer, atravessa o preload, chama o I
 
 Criados os 8 documentos de `docs/` e os arquivos de acompanhamento. Todos os números citados vêm da inspeção registrada em `docs/ANALISE_REA.md` e das contagens do SQLite.
 
+## 05/11/2026 — Publicação
+
+- Commit `47fb82f` criado e enviado para `origin/main` (`https://github.com/vinicon14/YAMI.git`).
+- Verificado com `git ls-remote origin refs/heads/main` → `47fb82ff66e55a26d5343d1821f2181ff8bfeb7c`.
+
 ## Pendências
 
-- Push para `origin/main` bloqueado: `gh` com token inválido; é necessário `gh auth login` ou PAT.
 - Validação real de voz depende do VoiceStudio online (M4).
+- Investigar o crash do Electron 45 nesta máquina (backlog técnico).
